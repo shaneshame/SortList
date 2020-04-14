@@ -1,31 +1,54 @@
-import React, { useState } from "react";
-import "./styles.css";
+import React, { useState } from 'react';
+import './styles.css';
 
 const NUM_INPUT_ROWS = 30;
 
-const sortLines = text => {
-  return text
-    .split("\n")
-    .sort((a, b) => a.localeCompare(b))
-    .join("\n");
+const sortLines = lines => {
+  return lines.sort((a, b) => a.localeCompare(b));
 };
 
-const stripDuplicates = text => {
-  return Array.from(new Set(text.split("\n"))).join("\n");
+const stripDuplicates = list => {
+  return Array.from(new Set(list));
+};
+
+const trim = (s = '') => {
+  return s.trim();
+};
+
+const apply = f => list => {
+  return list.map(item => {
+    return f(item);
+  });
+};
+
+const doWhen = (f, cond) => value => {
+  const predicate = typeof cond === 'function' ? cond(value) : value;
+  return predicate ? f(value) : value;
 };
 
 export default function App() {
   const [checkedStripDuplicates, setCheckedStripDuplicates] = useState(false);
 
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
 
   const toggleCheckedStripDuplicates = () => {
     setCheckedStripDuplicates(!checkedStripDuplicates);
   };
 
   const sortText = () => {
-    const processedText = checkedStripDuplicates ? stripDuplicates(text) : text;
-    setText(sortLines(processedText.trim()));
+    const processList = list => {
+      return [
+        apply(trim),
+        doWhen(stripDuplicates, checkedStripDuplicates),
+        sortLines
+      ].reduce((accumulatedValue, func) => {
+        return func(accumulatedValue);
+      }, list);
+    };
+
+    const result = processList(text.split('\n')).join('\n');
+
+    setText(result);
   };
 
   const handleCtrlEnter = e => {
@@ -61,9 +84,13 @@ export default function App() {
           <button className="sort-button" type="submit">
             Sort
           </button>
-          <label htmlFor="checkbox-strip-duplicates">
+          <label
+            className="strip-dups__input-label"
+            htmlFor="checkbox-strip-duplicates"
+          >
             <input
               checked={checkedStripDuplicates}
+              className="strip-dups__input"
               id="checkbox-strip-duplicates"
               name="stripDuplicates"
               onChange={toggleCheckedStripDuplicates}

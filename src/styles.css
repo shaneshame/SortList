@@ -24,3 +24,11 @@
 .sub-textarea {
   display: block;
 }
+
+.strip-dups__input-label {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 250px;
+}
