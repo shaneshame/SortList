@@ -1,0 +1,26 @@
+.App {
+  font-family: sans-serif;
+}
+
+.app-form {
+  display: flex;
+}
+
+.user-input {
+  height: 30em;
+  width: 25em;
+}
+
+.sort-button {
+  height: 2em;
+  padding: 1px 13px;
+  margin-left: 0.5em;
+}
+
+.sort-button:hover {
+  filter: brightness(80%);
+}
+
+.sub-textarea {
+  display: block;
+}

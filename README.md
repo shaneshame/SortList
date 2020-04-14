@@ -1,2 +1,0 @@
-# SortList
-Created with CodeSandbox
